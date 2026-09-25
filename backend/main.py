@@ -18,7 +18,7 @@ model = "openai/gpt-oss-120b"
 app=FastAPI()
 
 app.add_middleware(
-    CORSMiddleware,m
+    CORSMiddleware,
     allow_origins=["https://ask-about-me.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
