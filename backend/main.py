@@ -7,7 +7,6 @@ from groq import Groq
 from pydantic import BaseModel
 import time
 import json
-from fastapi.responses import StreamingResponse
 
 load_dotenv()
 my_api_key=os.getenv("GROQ_API_KEY")

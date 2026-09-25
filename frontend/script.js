@@ -40,8 +40,23 @@ async function sendMessage() {
 
     questionInput.value = "";
 
+const aiMessage = document.createElement("div");
+    aiMessage.classList.add("message", "ai-message");
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("bubble", "loader");
+
+    bubble.innerHTML = `
+     <span></span>
+     <span></span>
+     <span></span>
+    `;
+
+    aiMessage.appendChild(bubble);
+    chatBox.appendChild(aiMessage);
+
     try {
-        const response = await fetch("http://127.0.0.1:8000/chat", {
+        const response = await fetch("https://ask-about-me.onrender.com/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -53,13 +68,18 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        // Show AI answer
-        addMessage(data.answer, "ai");
+        // Remove loader and show answer
+        bubble.classList.remove("loader");
+        bubble.innerHTML = marked.parse(data.answer);
 
     } catch (error) {
-        addMessage("Something went wrong. Please try again.", "ai");
+        bubble.classList.remove("loader");
+        bubble.textContent = "Something went wrong. Please try again.";
+
         console.error(error);
     }
+
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 function handleEnter(event) {
