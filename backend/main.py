@@ -7,6 +7,7 @@ from groq import Groq
 from pydantic import BaseModel
 import time
 import json
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 my_api_key=os.getenv("GROQ_API_KEY")
@@ -15,6 +16,14 @@ client = Groq(api_key = my_api_key)
 
 model = "openai/gpt-oss-120b"
 app=FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,m
+    allow_origins=["https://ask-about-me.vercel.app"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class Experience(BaseModel):
     company: str | None = None
