@@ -66,21 +66,7 @@ const aiMessage = document.createElement("div");
             })
         });
 
-       const reader = response.body.getReader();
-       const decoder = new TextDecoder();
-
-       let answer = "";
-
-       while (true) {
-            const { value, done } = await reader.read();
-
-            if (done) break;
-
-            const chunk = decoder.decode(value);
-            answer += chunk;
-
-            bubble.innerHTML = marked.parse(answer);
-    }
+        const data = await response.json();
 
         // Remove loader and show answer
         bubble.classList.remove("loader");

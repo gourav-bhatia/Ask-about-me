@@ -8,7 +8,6 @@ from pydantic import BaseModel
 import time
 import json
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
 
 load_dotenv()
 my_api_key=os.getenv("GROQ_API_KEY")
@@ -82,14 +81,9 @@ def ask_candidate(question:str, resume:Resume):
                 "role":"user",
                 "content":question
             }
-        ],
-        stream=True
+        ]
     )
-    for chunk in stream:
-        content = chunk.choices[0].delta.content
-
-        if content:
-            yield content
+    return response.choices[0].message.content
 
 def parse_resume(resume_text):
     system_prompt=f"""
@@ -172,7 +166,6 @@ def chat(request: ChatRequest):
     resume_text=read_pdf(Path("Gourav_Bhatia.pdf"))
     resume=parse_resume(resume_text) 
     answer=ask_candidate(request.question, resume)
-    return  StreamingResponse(
-        ask_candidate(request.question, resume),
-        media_type="text/plain"
-    )
+    return{
+        "answer":answer
+    }
